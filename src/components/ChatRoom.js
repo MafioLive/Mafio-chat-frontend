@@ -125,12 +125,10 @@ const ChatRoom = (props) => {
     if (isTyping) {
       socketRef.current.emit("start typing message", {
         senderId: socketRef.current.id,
-        user,
       });
     } else {
       socketRef.current.emit("stop typing message", {
         senderId: socketRef.current.id,
-        user,
       });
     }
   }, [isTyping]);
