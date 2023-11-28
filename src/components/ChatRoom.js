@@ -19,19 +19,18 @@ import '../css/message.css';
  * that the parent component wants to
  * @returns The `ChatRoom` component is being returned, which renders the `InfoBar`, `Messages`,
  * `NewMessageForm`, and `Indicator` components. It also sets up a WebSocket connection using
- * `socket.io` and manages state for `messages`, `newMessage`, `users`, `typingUsers`, `user`, and
+ * `socket.io` and manages state for `messages`, `newMessage`, `users`, `user`, and
  * `file`. The `useEffect` hook is used to set up event
  */
 const ChatRoom = (props) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [users, setUsers] = useState([]);
-  const [typingUsers, setTypingUsers] = useState([]);
-  const [user, setUser] = useState();
+  const [user,setUser] = useState();
   const [file, setFile] = useState();
   const socketRef = useRef();
 
-  const { isTyping, startTyping, stopTyping, cancelTyping } = useTyping();
+  const {startTyping, stopTyping, cancelTyping } = useTyping();
 
   const { room, name } = props.match.params;
 
@@ -57,20 +56,6 @@ const ChatRoom = (props) => {
         ownedByCurrentUser: message.senderId === socketRef.current.id,
       };
       setMessages((messages) => [...messages, incomingMessage]);
-    });
-
-    socketRef.current.on("start typing message", (typingInfo) => {
-      if (typingInfo.senderId !== socketRef.current.id) {
-        const user = typingInfo.user;
-        setTypingUsers((users) => [...users, user]);
-      }
-    });
-
-    socketRef.current.on("stop typing message", (typingInfo) => {
-      if (typingInfo.senderId !== socketRef.current.id) {
-        const user = typingInfo.user;
-        setTypingUsers((users) => users.filter((u) => u.name !== user.name));
-      }
     });
 
     // Clean up function
@@ -121,23 +106,11 @@ const ChatRoom = (props) => {
     }
   }
 
-  useEffect(() => {
-    if (isTyping) {
-      socketRef.current.emit("start typing message", {
-        senderId: socketRef.current.id,
-      });
-    } else {
-      socketRef.current.emit("stop typing message", {
-        senderId: socketRef.current.id,
-      });
-    }
-  }, [isTyping]);
-
   return (
     <div className="outerContainer">
       <div className="container">
         <InfoBar room={room} />
-        <Messages messages={messages} typingUsers={typingUsers} />
+        <Messages messages={messages}/>
         <NewMessageForm
           selectFile={selectFile}
           newMessage={newMessage}
