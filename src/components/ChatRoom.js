@@ -34,7 +34,7 @@ const ChatRoom = (props) => {
 
   const { room, name } = props.match.params;
 
-  const url = "http://198.91.254.110:8000/";
+  const url = "http://192.168.1.117:8000/";
 
   useEffect(() => {
     socketRef.current = io(url, {
