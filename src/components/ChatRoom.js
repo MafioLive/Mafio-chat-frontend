@@ -32,7 +32,7 @@ const ChatRoom = (props) => {
 
   const { room, name } = props.match.params;
 
-  const url = "wss://192.168.1.117:8000/";
+  const url = "ws://192.168.1.117:8000/";
   
   useEffect(() => {
     socketRef.current = io(url, {
