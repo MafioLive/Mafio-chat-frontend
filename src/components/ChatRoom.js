@@ -37,6 +37,7 @@ const ChatRoom = (props) => {
   useEffect(() => {
     socketRef.current = io(url, {
       query: { room, name },
+      rejectUnauthorized: false
     });
 
     setUser({
