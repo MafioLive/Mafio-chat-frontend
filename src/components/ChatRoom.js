@@ -36,6 +36,10 @@ const ChatRoom = (props) => {
 
   const url = "http://192.168.1.117:8000/";
 
+  socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
+
   useEffect(() => {
     socketRef.current = io(url, {
       query: { room, name },
