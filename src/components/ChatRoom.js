@@ -5,7 +5,6 @@ import NewMessageForm from "./NewMessageForm";
 import InfoBar from "./InfoBar";
 import Indicator from "./Indicator";
 import Messages from "./Messages";
-
 import "../css/input.css";
 import '../css/messages.css';
 import '../css/message.css';
@@ -29,17 +28,12 @@ const ChatRoom = (props) => {
   const [user,setUser] = useState();
   const [file, setFile] = useState();
   const socketRef = useRef();
-
   const {startTyping, stopTyping, cancelTyping } = useTyping();
 
   const { room, name } = props.match.params;
 
-  const url = "http://192.168.1.117:8000/";
-
-  io.on("connect_error", (err) => {
-  console.log(`connect_error due to ${err.message}`);
-});
-
+  const url = "wss://192.168.1.117:8000/";
+  
   useEffect(() => {
     socketRef.current = io(url, {
       query: { room, name },
